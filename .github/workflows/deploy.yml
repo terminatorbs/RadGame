@@ -1,0 +1,17 @@
+name: Run SSH Script
+
+on: [push]  # This triggers the action on every push to the repository. Adjust as needed.
+
+jobs:
+  execute-ssh-script:
+    runs-on: ubuntu-latest  # GitHub-hosted runner
+
+    steps:
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3  # This action sets up the SSH agent with your private key
+      with:
+        ssh-private-key: ${{ secrets.GDMAIN }}
+
+    - name: Run script on server
+      run: |
+        ssh -o StrictHostKeyChecking=no -p 57021 root@shiny.space 'bash -s' < /root/deploy-script.sh
